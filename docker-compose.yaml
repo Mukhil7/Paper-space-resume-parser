@@ -1,0 +1,29 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - resume-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: resume-parser
+    ports:
+      - "8501:8501"
+    depends_on:
+      - mongo
+    networks:
+      - resume-network
+
+networks:
+  resume-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
